@@ -187,3 +187,50 @@ function hasEmptyTile() {
     }
     return false;
 }
+
+
+window.onload = function () {
+    setGame();
+    setupTouchControls(); // Add touch event listeners for mobile
+};
+
+function setupTouchControls() {
+    let boardElement = document.getElementById("board");
+    let startX, startY, endX, endY;
+
+    boardElement.addEventListener("touchstart", function (e) {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+    });
+
+    boardElement.addEventListener("touchmove", function (e) {
+        e.preventDefault(); // Prevent scrolling while swiping
+    });
+
+    boardElement.addEventListener("touchend", function (e) {
+        endX = e.changedTouches[0].clientX;
+        endY = e.changedTouches[0].clientY;
+
+        let deltaX = endX - startX;
+        let deltaY = endY - startY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX > 50) {
+                slideRight();
+                setTwo();
+            } else if (deltaX < -50) {
+                slideLeft();
+                setTwo();
+            }
+        } else {
+            if (deltaY > 50) {
+                slideDown();
+                setTwo();
+            } else if (deltaY < -50) {
+                slideUp();
+                setTwo();
+            }
+        }
+        document.getElementById("score").innerText = score;
+    });
+}
